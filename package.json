@@ -1,0 +1,65 @@
+{
+  "name": "@tele2/react-native-pdf-wrapper",
+  "description": "",
+  "version": "0.0.1",
+  "author": {
+    "name": "Lucas Bento",
+    "email": "lucas.bento@tele2.com",
+    "url": "https://github.com/lucasbento"
+  },
+  "bugs": "https://github.com/Tele2-NL/react-native-pdf-wrapper/issues",
+  "devDependencies": {
+    "babel-eslint": "^8.2.2",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-to-json": "^3.2.2",
+    "eslint": "^4.11.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.1.0",
+    "eslint-plugin-react-native": "^3.1.0",
+    "jest": "^21.2.1"
+  },
+  "homepage": "https://github.com/Tele2-NL/react-native-pdf-wrapper#readme",
+  "jest": {
+    "preset": "react-native",
+    "setupFiles": [
+      "<rootDir>/tests/setupTests.js"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example/node_modules"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
+  },
+  "keywords": [
+    "android",
+    "ios",
+    "react",
+    "react-native",
+    "pdf"
+  ],
+  "license": "MIT",
+  "main": "./src/index.js",
+  "peerDependencies": {
+    "prop-types": "*",
+    "react": "*",
+    "react-native": "*",
+    "react-native-pdf": ">=5.0.1",
+    "rn-fetch-blob": ">=0.10.12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Tele2-NL/react-native-pdf-wrapper"
+  },
+  "scripts": {
+    "ci": "npm run lint && npm run test -- --runInBand",
+    "lint": "eslint ./src",
+    "test": "jest"
+  },
+  "dependencies": {
+    "crypto-js": "^3.1.9-1"
+  }
+}
