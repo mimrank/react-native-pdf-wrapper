@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Platform, NativeModules, ActivityIndicator, View, Text, StyleSheet } from 'react-native';
+import {
+  Platform,
+  NativeModules,
+  ActivityIndicator,
+  View,
+  StyleSheet,
+} from 'react-native';
 import Pdf from 'react-native-pdf';
 import PdfWebView from './PdfWebView';
+import Error from './Error';
 
 const { PdfViewManager } = NativeModules;
 
@@ -11,6 +18,8 @@ const IS_IOS = Platform.OS === 'ios';
 class PdfViewer extends Component {
   static propTypes = {
     ...Pdf.propTypes,
+    onLoadComplete: PropTypes.func,
+    onError: PropTypes.func,
     loading: PropTypes.node,
     error: PropTypes.node,
   };
@@ -19,28 +28,37 @@ class PdfViewer extends Component {
     onLoadComplete: () => {},
     onError: () => {},
     loading: <ActivityIndicator />,
-    error: <Text>Error thing</Text>,
+    error: <Error />,
   };
 
   state = {
     isLoading: true,
     hasError: false,
     supportsPDFKit: null,
+    filePath: null,
   };
 
   componentDidMount() {
+    this.handleCheckPDFKitSupport();
+  }
+
+  getFilePath = () => this.state.filePath;
+
+  retryPdf = () => this.setState({ isLoading: true, hasError: false });
+
+  handleCheckPDFKitSupport = () => {
     if (IS_IOS) {
       PdfViewManager.supportPDFKit(this.handleSupportPDFKit);
     }
-  }
+  };
 
-  handleSupportPDFKit = supportsPDFKit =>
+  handleSupportPDFKit = supportsPDFKit => this.setState({ supportsPDFKit });
+
+  handlePdfLoaded = (filePath) => {
     this.setState({
-      supportsPDFKit,
+      isLoading: false,
+      filePath,
     });
-
-  handlePdfLoaded = () => {
-    this.setState({ isLoading: false });
 
     this.props.onLoadComplete();
   };
@@ -54,7 +72,9 @@ class PdfViewer extends Component {
     this.props.onError(error);
   };
 
-  renderError = () => React.cloneElement(this.props.error);
+  renderError = () => React.cloneElement(this.props.error, {
+    retryPdf: this.retryPdf,
+  });
 
   renderLoading = () => React.cloneElement(this.props.loading);
 
@@ -65,11 +85,7 @@ class PdfViewer extends Component {
       return this.renderError();
     }
 
-    if (supportsPDFKit === null) {
-      return null;
-    }
-
-    if (!supportsPDFKit) {
+    if (IS_IOS && supportsPDFKit === false) {
       return (
         <PdfWebView
           {...this.props}
@@ -79,10 +95,14 @@ class PdfViewer extends Component {
       );
     }
 
+    if (IS_IOS && supportsPDFKit === null) {
+      return null;
+    }
+
     return (
       <Pdf
         {...this.props}
-        onLoadComplete={this.handlePdfLoaded}
+        onLoadComplete={(n, filePath) => this.handlePdfLoaded(filePath)}
         activityIndicator={<View />}
         onError={this.handleError}
         style={styles.pdf}
@@ -91,8 +111,7 @@ class PdfViewer extends Component {
   }
 
   render() {
-    const { Loading, ...props } = this.props;
-    const { isLoading, supportsPDFKit } = this.state;
+    const { isLoading } = this.state;
 
     return (
       <View style={styles.container}>

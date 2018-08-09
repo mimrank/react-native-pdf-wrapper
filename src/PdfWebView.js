@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { NativeModules, View, Text, WebView, StyleSheet } from 'react-native';
+import { NativeModules, View, WebView } from 'react-native';
 import Pdf from 'react-native-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
 import SHA1 from 'crypto-js/sha1';
 import { FILE_TYPES, getFileType, isRequestSuccessful } from './utils';
 
 const { PdfWrapper } = NativeModules;
-
-const ERROR_TYPES = {
-  INVALID_PDF: 'INVALID_PDF',
-};
 
 class PdfWebView extends Component {
   static propTypes = Pdf.propTypes;
@@ -20,7 +15,6 @@ class PdfWebView extends Component {
   };
 
   state = {
-    isLoading: true,
     source: null,
   };
 
@@ -36,34 +30,26 @@ class PdfWebView extends Component {
 
   handleCopyLocalFile = destinationPath => RNFetchBlob.fs.cp(this.props.source.uri, destinationPath);
 
-  handleWriteBase64File = destinationPath =>
-    RNFetchBlob.fs.writeFile(
-      destinationPath,
-      this.props.source.uri.replace(/data:application\/pdf;base64,/i, ''),
-      'base64'
-    );
+  handleWriteBase64File = destinationPath => RNFetchBlob.fs.writeFile(
+    destinationPath,
+    this.props.source.uri.replace(/data:application\/pdf;base64,/i, ''),
+    'base64',
+  );
 
   handleRemoveFiles = async (localPath, temporaryPath) => {
     await RNFetchBlob.fs.unlink(localPath);
     await RNFetchBlob.fs.unlink(temporaryPath);
   };
 
-  handleRequestFile = (temporaryPath) =>
-    RNFetchBlob
-      .config({ path: temporaryPath })
-      .fetch(
-        this.props.source.method || 'GET',
-        this.props.source.uri,
-        this.props.source.headers || {},
-        this.props.source.body || "",
-      );
-  
-  handleSetFile = uri =>
-    this.setState({
-      source: {
-        uri,
-      },
-    });
+  handleRequestFile = temporaryPath => RNFetchBlob.config({ path: temporaryPath })
+    .fetch(
+      this.props.source.method || 'GET',
+      this.props.source.uri,
+      this.props.source.headers || {},
+      this.props.source.body || '',
+    );
+
+  handleSetFile = uri => this.setState({ source: { uri } });
 
   handleShowFile = async () => {
     const { source } = this.props;
@@ -93,25 +79,22 @@ class PdfWebView extends Component {
     try {
       // First download to a local temporary file
       const response = await this.handleRequestFile(localTemporaryFilePath);
-
       // Check if request was successful
       if (!isRequestSuccessful(response)) {
-        throw new Error(ERROR_TYPES.INVALID_PDF);
+        throw new Error('Invalid Pdf');
       }
 
       // Check if Pdf is not corrupted
       await PdfWrapper.isPdfValid(localTemporaryFilePath);
 
       // Copy the temporary file to a normal file
-      await RNFetchBlob.fs.cp(localTemporaryFilePath, localFilePath)
+      await RNFetchBlob.fs.cp(localTemporaryFilePath, localFilePath);
 
       // Remove temporary file
       RNFetchBlob.fs.unlink(localTemporaryFilePath);
 
       this.handleSetFile(localFilePath);
     } catch (error) {
-      console.log('NativeModules', NativeModules)
-      console.log('error', error)
       this.handleError({
         error,
         localPath: localFilePath,
@@ -120,29 +103,25 @@ class PdfWebView extends Component {
     }
   }
 
-  handlePdfLoaded = () => this.props.onLoadComplete();
+  handlePdfLoaded = () => this.props.onLoadComplete(this.state.source.uri);
 
   render() {
     const { source } = this.state;
 
     if (!source) {
-      return null;
+      return (
+        <View />
+      );
     }
 
     return (
       <WebView
+        {...this.props}
         source={source}
         onLoadEnd={this.handlePdfLoaded}
-        onError={e => console.log('error', e)}
       />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default PdfWebView;
