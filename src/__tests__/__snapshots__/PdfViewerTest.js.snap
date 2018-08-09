@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PdfViewer /> renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <Component />
+  <Pdf
+    activityIndicator={<Component />}
+    activityIndicatorProps={
+      Object {
+        "color": "#009900",
+        "progressTintColor": "#009900",
+      }
+    }
+    enablePaging={false}
+    enableRTL={false}
+    error={
+      <Error
+        retryPdf={[Function]}
+      />
+    }
+    fitPolicy={2}
+    horizontal={false}
+    loading={<Component />}
+    onError={[Function]}
+    onLoadComplete={[Function]}
+    onLoadProgress={[Function]}
+    onPageChanged={[Function]}
+    onPageSingleTap={[Function]}
+    onScaleChanged={[Function]}
+    page={1}
+    password=""
+    scale={1}
+    source={
+      Object {
+        "uri": "https://remote/path/to/file",
+      }
+    }
+    spacing={10}
+    style={
+      Object {
+        "flex": 1,
+        "width": "100%",
+      }
+    }
+  />
+</Component>
+`;
+
+exports[`<PdfViewer /> should fallback to \`PdfWebView\` if PDFKit is not supported 1`] = `
+<Component
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <Component />
+  <PdfWebView
+    error={
+      <Error
+        retryPdf={[Function]}
+      />
+    }
+    loading={<Component />}
+    onError={[Function]}
+    onLoadComplete={[Function]}
+    source={
+      Object {
+        "uri": "https://remote/path/to/file",
+      }
+    }
+  />
+</Component>
+`;

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PdfWebView /> renders correctly 1`] = `
+<WebView
+  onError={[MockFunction]}
+  onLoadEnd={[Function]}
+  source={
+    Object {
+      "uri": "/path/to/cache/dir/3953e93bb2ac01a09496abbb91e2bb0070f75482.pdf",
+    }
+  }
+/>
+`;

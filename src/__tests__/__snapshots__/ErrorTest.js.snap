@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Error /> renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "flex": 1,
+      "justifyContent": "center",
+      "paddingHorizontal": 48,
+    }
+  }
+>
+  <Component
+    style={
+      Object {
+        "color": "black",
+        "fontSize": 14,
+        "textAlign": "center",
+      }
+    }
+  >
+    There was an error while trying to load pdf.
+  </Component>
+  <TouchableOpacity
+    activeOpacity={0.2}
+    onPress={[MockFunction]}
+    style={
+      Object {
+        "borderRadius": 4,
+        "marginTop": 12,
+        "padding": 6,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "fontWeight": "bold",
+          "textAlign": "center",
+        }
+      }
+    >
+      Retry
+    </Component>
+  </TouchableOpacity>
+</Component>
+`;
