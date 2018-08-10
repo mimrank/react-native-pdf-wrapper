@@ -1,0 +1,21 @@
+{
+  "name": "PdfWrapperExample",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@tele2/react-native-pdf-wrapper": "*",
+    "glob-to-regexp": "^0.4.0",
+    "react": "16.4.1",
+    "react-native": "0.56.0",
+    "react-native-pdf": "^5.0.1",
+    "react-navigation": "^2.11.2",
+    "rn-fetch-blob": "^0.10.12"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
