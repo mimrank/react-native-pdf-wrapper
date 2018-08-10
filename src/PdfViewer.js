@@ -20,7 +20,9 @@ class PdfViewer extends Component {
     ...Pdf.propTypes,
     onLoadComplete: PropTypes.func,
     onError: PropTypes.func,
+    // Custom component to show while it's fetching the PDF
     loading: PropTypes.node,
+    // Custom component to show when an error occurs
     error: PropTypes.node,
   };
 
