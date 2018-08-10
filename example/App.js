@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-import PdfViewer from '@tele2/react-native-pdf-wrapper';
+import PdfWrapper from '@tele2/react-native-pdf-wrapper';
 import base64 from './files/base64';
 
 const PDF_EXAMPLE_TYPES = {
@@ -58,7 +58,7 @@ const List = ({ navigation }) => (
 );
 
 const Pdf = ({ navigation }) => (
-  <PdfViewer
+  <PdfWrapper
     source={PDF_EXAMPLE_SOURCES[navigation.state.params.type]}
   />
 )
