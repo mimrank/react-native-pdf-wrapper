@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NativeModules, View, WebView } from 'react-native';
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import Pdf from 'react-native-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
 import SHA1 from 'crypto-js/sha1';
@@ -41,23 +42,23 @@ class PdfWebView extends Component {
     await RNFetchBlob.fs.unlink(temporaryPath);
   };
 
-  handleRequestFile = temporaryPath => RNFetchBlob.config({ path: temporaryPath })
+  handleRequestFile = (source, temporaryPath) => RNFetchBlob.config({ path: temporaryPath })
     .fetch(
-      this.props.source.method || 'GET',
-      this.props.source.uri,
-      this.props.source.headers || {},
-      this.props.source.body || '',
+      source.method || 'GET',
+      source.uri,
+      source.headers || {},
+      source.body || '',
     );
 
   handleSetFile = uri => this.setState({ source: { uri } });
 
   handleShowFile = async () => {
-    const { source } = this.props;
+    const source = resolveAssetSource(this.props.source);
+
+    const fileType = getFileType(source);
 
     // File will be stored under cache directory
     const localFilePath = `${RNFetchBlob.fs.dirs.CacheDir}/${SHA1(source.uri)}.pdf`;
-
-    const fileType = getFileType(source);
 
     if (fileType === FILE_TYPES.LOCAL) {
       await this.handleCopyLocalFile(localFilePath);
@@ -65,7 +66,7 @@ class PdfWebView extends Component {
       return this.handleSetFile(localFilePath);
     }
 
-    if (fileType === FILE_TYPES.BASE_64) {
+    if (fileType === FILE_TYPES.BASE64) {
       await this.handleWriteBase64File(localFilePath);
 
       return this.handleSetFile(localFilePath);
@@ -78,7 +79,8 @@ class PdfWebView extends Component {
 
     try {
       // First download to a local temporary file
-      const response = await this.handleRequestFile(localTemporaryFilePath);
+      const response = await this.handleRequestFile(source, localTemporaryFilePath);
+
       // Check if request was successful
       if (!isRequestSuccessful(response)) {
         throw new Error('Invalid Pdf');
@@ -118,6 +120,7 @@ class PdfWebView extends Component {
       <WebView
         {...this.props}
         source={source}
+        originWhitelist={['file://', 'http://']}
         onLoadEnd={this.handlePdfLoaded}
       />
     );

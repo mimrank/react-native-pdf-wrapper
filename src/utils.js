@@ -1,7 +1,7 @@
 export const FILE_TYPES = {
   REMOTE: 'REMOTE',
   LOCAL: 'LOCAL',
-  BASE_64: 'BASE_64',
+  BASE64: 'BASE64',
 };
 
 export const getFileType = ({ uri } = {}) => {
@@ -18,7 +18,7 @@ export const getFileType = ({ uri } = {}) => {
   }
 
   if (uri.match(/^data:application\/pdf;base64/)) {
-    return FILE_TYPES.BASE_64;
+    return FILE_TYPES.BASE64;
   }
 
   return null;
