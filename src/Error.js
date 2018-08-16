@@ -17,7 +17,9 @@ const Error = ({ retryPdf }) => (
       onPress={retryPdf}
       style={styles.retryButtonContainer}
     >
-      <Text style={styles.retry}>Retry</Text>
+      <Text style={styles.retry}>
+        Retry
+      </Text>
     </TouchableOpacity>
   </View>
 );
