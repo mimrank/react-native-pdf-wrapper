@@ -22,6 +22,6 @@ export const getFileType = ({ uri } = {}) => {
   }
 
   return null;
-}
+};
 
 export const isRequestSuccessful = ({ respInfo }) => [200, 304].includes(respInfo.status);
