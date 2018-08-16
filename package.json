@@ -42,6 +42,9 @@
     ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example/node_modules"
     ]
   },
   "keywords": [
